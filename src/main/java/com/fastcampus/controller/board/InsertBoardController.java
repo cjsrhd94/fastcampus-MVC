@@ -1,36 +1,18 @@
 package com.fastcampus.controller.board;
 
-import com.fastcampus.biz.board.BoardDAO;
 import com.fastcampus.biz.board.BoardDAOJdbc;
 import com.fastcampus.biz.board.BoardVO;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+@Controller
+public class InsertBoardController {
 
-public class InsertBoardController implements Controller {
-    @Override
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping("/insertBoard.do")
+    public String insertBoard(BoardVO vo, BoardDAOJdbc boardDAO) {
         System.out.println("글 등록 기능 처리");
-
-        // 1. 사용자 입력정보 추출
-        String title = request.getParameter("title");
-        String writer = request.getParameter("writer");
-        String content = request.getParameter("content");
-
-        // 2. DB 연동 처리
-        BoardVO vo = new BoardVO();
-        vo.setTitle(title);
-        vo.setWriter(writer);
-        vo.setContent(content);
-
-        BoardDAO boardDAO = new BoardDAOJdbc();
         boardDAO.insertBoard(vo);
-
-        // 3. 화면 네비게이션
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("getBoardList.do");
-        return mav;
+        // 로직 처리 후, 이동할 화면을 문자열로 리턴하면 자동으로 forwarding된다.
+        return "getBoardList.do";
     }
 }

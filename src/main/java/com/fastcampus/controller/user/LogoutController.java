@@ -1,23 +1,16 @@
 package com.fastcampus.controller.user;
 
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class LogoutController implements Controller {
-    @Override
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
+@Controller
+public class LogoutController {
+    @RequestMapping("/logout.do")
+    public String logout(HttpSession session) {
         System.out.println("로그아웃 기능 처리");
-
-        HttpSession session = request.getSession();
-
         session.invalidate();
-
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("login.html");
-        return mav;
+        return "login.html";
     }
 }

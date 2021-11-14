@@ -1,48 +1,29 @@
 package com.fastcampus.controller.board;
 
-import com.fastcampus.biz.board.BoardDAO;
 import com.fastcampus.biz.board.BoardDAOJdbc;
 import com.fastcampus.biz.board.BoardVO;
 import com.fastcampus.biz.user.UserVO;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
-public class GetBoardListController implements Controller {
-    @Override
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
+@Controller
+public class GetBoardListController{
+
+    @RequestMapping("/getBoardList.do")
+    public ModelAndView getBoardList(BoardVO vo, BoardDAOJdbc boardDAO, HttpSession session, ModelAndView mav) {
         System.out.println("글 목록 검색 기능 처리");
-
-        // 0. 세션(내장 객체) 체크
-        HttpSession session = request.getSession();
         UserVO user = (UserVO) session.getAttribute("user");
-
-        ModelAndView mav = new ModelAndView();
         if (user == null) {
             mav.setViewName("login.html");
         } else {
-            // 1. 사용자 입력정보 추출
-            String searchCondition = request.getParameter("searchCondition");
-            String searchKeyword = request.getParameter("searchKeyword");
-
             // Null Check
-            if (searchCondition == null) searchCondition = "TITLE";
-            if (searchKeyword == null) searchKeyword = "";
+            if (vo.getSearchCondition() == null) vo.setSearchCondition("TITLE");
+            if (vo.getSearchKeyword() == null) vo.setSearchKeyword("");
 
-            // 2. DB 연동 처리
-            BoardVO vo = new BoardVO();
-            vo.setSearchCondition(searchCondition);
-            vo.setSearchKeyword(searchKeyword);
-
-            BoardDAO boardDAO = new BoardDAOJdbc();
-            List<BoardVO> boardList = boardDAO.getBoardList(vo);
-
-            // 3. 검색 결과를 JSP 파일에서 사용할 수 있도록 session이나 request에 등록한다.
-            session.setAttribute("boardList", boardList);
+            session.setAttribute("boardList", boardDAO.getBoardList(vo));
             session.setAttribute("search", vo);
 
             mav.setViewName("getBoardList.jsp");

@@ -2,40 +2,23 @@ package com.fastcampus.controller.user;
 
 import com.fastcampus.biz.user.UserDAO;
 import com.fastcampus.biz.user.UserVO;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class LoginController implements Controller {
-    @Override
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
+@Controller
+public class LoginController {
+
+    @RequestMapping("/login.do")
+    public String login(UserVO vo, UserDAO userDAO, HttpSession session) {
         System.out.println("로그인 기능 처리");
-
-        // 1. 사용자 입력정보 추출
-        String id = request.getParameter("id");
-        String password = request.getParameter("password");
-
-        // 2. DB 연동 처리
-        UserVO vo = new UserVO();
-        vo.setId(id);
-        vo.setPassword(password);
-
-        UserDAO userDAO = new UserDAO();
         UserVO user = userDAO.getUser(vo);
-
-        // 3. 응답 화면 구성
-        ModelAndView mav = new ModelAndView();
         if (user != null) {
-            // 로그인 성공 시 세션(내장객체)에 사용자 정보를 저장한다.
-            HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            mav.setViewName("getBoardList.do");
+            return "getBoardList.do";
         } else {
-            mav.setViewName("login.html");
+            return "login.html";
         }
-        return mav;
     }
 }
