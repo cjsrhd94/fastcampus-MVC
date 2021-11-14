@@ -1,6 +1,7 @@
 package com.fastcampus.controller.user;
 
-import com.fastcampus.controller.Controller;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,13 +9,15 @@ import javax.servlet.http.HttpSession;
 
 public class LogoutController implements Controller {
     @Override
-    public String handleRequest(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("로그아웃 기능 처리");
 
         HttpSession session = request.getSession();
 
         session.invalidate();
 
-        return "login.html";
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("login.html");
+        return mav;
     }
 }

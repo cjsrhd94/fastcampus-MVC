@@ -3,14 +3,15 @@ package com.fastcampus.controller.board;
 import com.fastcampus.biz.board.BoardDAO;
 import com.fastcampus.biz.board.BoardDAOJdbc;
 import com.fastcampus.biz.board.BoardVO;
-import com.fastcampus.controller.Controller;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class DeleteBoardController implements Controller {
     @Override
-    public String handleRequest(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("글 삭제 기능 처리");
 
         // 1. 사용자 입력정보 추출
@@ -24,6 +25,8 @@ public class DeleteBoardController implements Controller {
         boardDAO.deleteBoard(vo);
 
         // 3. 화면 네비게이션
-        return "getBoardList.do";
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("getBoardList.do");
+        return mav;
     }
 }
