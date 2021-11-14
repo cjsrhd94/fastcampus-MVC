@@ -1,10 +1,7 @@
-<%@page import="com.fastcampus.biz.user.UserVO" %>
 <%@page contentType="text/html; charset=EUC-KR" %>
 
-<%
-    // 1. 세션 정보 추출
-    UserVO user = (UserVO) session.getAttribute("user");
-%>
+<%-- EL(Expression Language) 이란? --%>
+<%-- session이나 request 내장 객체에 등록된 데이터를 JSP 파일에서 접근하기 위한 표현식 --%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -14,8 +11,8 @@
 <body>
 <center>
     <h1>새글 등록하기</h1>
-    <h3><font color="red"><%= user.getName() %>
-    </font>님 로그인 환영합니다...<a href="logout_proc.jsp">LOG-OUT</a></h3>
+    <h3><font color="red">${user.name }
+    </font>님 로그인 환영합니다...<a href="logout.do">LOG-OUT</a></h3>
     <hr>
     <form action="insertBoard.do" method="post">
         <table border="1" cellpadding="0" cellspacing="0">

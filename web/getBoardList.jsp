@@ -1,17 +1,12 @@
-<%@page import="com.fastcampus.biz.user.UserVO" %>
-<%@page import="com.fastcampus.biz.board.BoardDAO" %>
-<%@page import="java.util.List" %>
-<%@page import="com.fastcampus.biz.board.BoardVO" %>
 <%@page contentType="text/html; charset=EUC-KR" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<%
-    // 1. 세션에 등록된 검색 결과를 꺼낸다.
-    UserVO user = (UserVO) session.getAttribute("user");
-    List<BoardVO> boardList = (List) session.getAttribute("boardList");
+<%-- EL(Expression Language) 이란? --%>
+<%-- session이나 request 내장 객체에 등록된 데이터를 JSP 파일에서 접근하기 위한 표현식 --%>
 
-    // 2. 응답 화면 구성
-%>
-
+<%-- JSTL(JSP Standard Tag Library) 이란? --%>
+<%-- JSP 파일에서 if, for, switch 등과 같은 자바 코드르 대체하기 위해 제공되는 표준 액션 태그 --%>
+<%-- 다만 반드시 taglib 설정이 필요하다. (XML Namespace 등록과 동일한 개념) --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -21,7 +16,7 @@
 <body>
 <center>
     <h1>게시 글 목록</h1>
-    <h3><font color="red"><%= user.getName() %>
+    <h3><font color="red">${user.name }
     </font>님 로그인 환영합니다...<a href="logout.do">LOG-OUT</a></h3>
 
     <!-- 검색 시작 -->
@@ -30,8 +25,8 @@
             <tr>
                 <td align="right">
                     <select name="searchCondition">
-                        <option value="TITLE">제목</option>
-                        <option value="CONTENT">내용</option>
+                        <option value="TITLE" >제목</option>
+                        <option value="CONTENT" >내용</option>
                     </select>
                     <input name="searchKeyword" type="text"/>
                     <input type="submit" value="검색"/>
@@ -50,20 +45,20 @@
             <th bgcolor="orange" width="100">조회수</th>
         </tr>
 
-        <% for (BoardVO board : boardList) { %>
+        <c:forEach var="board" items="${boardList }">
         <tr>
-            <td><%= board.getSeq() %>
+            <td>${board.seq }
             </td>
-            <td align="left"><a href="getBoard.do?seq=<%= board.getSeq() %>"><%= board.getTitle() %>
+            <td align="left"><a href="getBoard.do?seq=${board.seq }">${board.title }
             </a></td>
-            <td><%= board.getWriter() %>
+            <td>${board.writer }
             </td>
-            <td><%= board.getRegDate() %>
+            <td>${board.regDate }
             </td>
-            <td><%= board.getCnt() %>
+            <td>${board.cnt }
             </td>
         </tr>
-        <% } %>
+        </c:forEach>
 
     </table>
     <br>
