@@ -1,10 +1,5 @@
 package com.fastcampus.controller;
 
-import com.fastcampus.controller.board.*;
-import com.fastcampus.controller.user.LoginController;
-import com.fastcampus.controller.user.LogoutController;
-
-import java.util.HashMap;
 import java.util.Map;
 
 public class HandlerMapping {

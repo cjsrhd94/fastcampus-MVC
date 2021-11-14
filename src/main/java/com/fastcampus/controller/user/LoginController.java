@@ -21,4 +21,11 @@ public class LoginController {
             return "login.html";
         }
     }
+
+    @RequestMapping("/logout.do")
+    public String logout(HttpSession session) {
+        System.out.println("로그아웃 기능 처리");
+        session.invalidate();
+        return "login.html";
+    }
 }
