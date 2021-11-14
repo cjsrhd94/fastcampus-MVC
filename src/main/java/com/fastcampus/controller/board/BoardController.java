@@ -1,8 +1,9 @@
 package com.fastcampus.controller.board;
 
-import com.fastcampus.biz.board.BoardDAOJdbc;
+import com.fastcampus.biz.board.BoardService;
 import com.fastcampus.biz.board.BoardVO;
 import com.fastcampus.biz.user.UserVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,38 +13,41 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class BoardController {
 
+    @Autowired
+    private BoardService boardService;
+
     @RequestMapping("/insertBoard.do")
-    public String insertBoard(BoardVO vo, BoardDAOJdbc boardDAO) {
+    public String insertBoard(BoardVO vo) {
         System.out.println("글 등록 기능 처리");
-        boardDAO.insertBoard(vo);
+        boardService.insertBoard(vo);
         // 로직 처리 후, 이동할 화면을 문자열로 리턴하면 자동으로 forwarding된다.
         return "getBoardList.do";
     }
 
     @RequestMapping("/updateBoard.do")
-    public String updateBoard(BoardVO vo, BoardDAOJdbc boardDAO) {
+    public String updateBoard(BoardVO vo) {
         System.out.println("글 수정 기능 처리");
-        boardDAO.updateBoard(vo);
+        boardService.updateBoard(vo);
         return "getBoardList.do";
     }
 
     @RequestMapping("/deleteBoard.do")
-    public String deleteBoard(BoardVO vo, BoardDAOJdbc boardDAO) {
+    public String deleteBoard(BoardVO vo) {
         System.out.println("글 삭제 기능 처리");
-        boardDAO.deleteBoard(vo);
+        boardService.deleteBoard(vo);
         return "getBoardList.do";
     }
 
     @RequestMapping("/getBoard.do")
-    public ModelAndView getBoard(BoardVO vo, BoardDAOJdbc boardDAO, HttpSession session, ModelAndView mav) {
+    public ModelAndView getBoard(BoardVO vo, HttpSession session, ModelAndView mav) {
         System.out.println("글 상세 조회 기능 처리");
-        session.setAttribute("board", boardDAO.getBoard(vo));
+        session.setAttribute("board", boardService.getBoard(vo));
         mav.setViewName("getBoard.jsp");
         return mav;
     }
 
     @RequestMapping("/getBoardList.do")
-    public ModelAndView getBoardList(BoardVO vo, BoardDAOJdbc boardDAO, HttpSession session, ModelAndView mav) {
+    public ModelAndView getBoardList(BoardVO vo, HttpSession session, ModelAndView mav) {
         System.out.println("글 목록 검색 기능 처리");
         UserVO user = (UserVO) session.getAttribute("user");
         if (user == null) {
@@ -53,7 +57,7 @@ public class BoardController {
             if (vo.getSearchCondition() == null) vo.setSearchCondition("TITLE");
             if (vo.getSearchKeyword() == null) vo.setSearchKeyword("");
 
-            session.setAttribute("boardList", boardDAO.getBoardList(vo));
+            session.setAttribute("boardList", boardService.getBoardList(vo));
             session.setAttribute("search", vo);
 
             mav.setViewName("getBoardList.jsp");
