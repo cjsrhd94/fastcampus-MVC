@@ -20,15 +20,15 @@
     </font>님 로그인 환영합니다...<a href="logout.do">LOG-OUT</a></h3>
 
     <!-- 검색 시작 -->
-    <form action="getBoardList.jsp" method="post">
+    <form action="getBoardList.do" method="post">
         <table border="1" cellpadding="0" cellspacing="0" width="700">
             <tr>
                 <td align="right">
                     <select name="searchCondition">
-                        <option value="TITLE" >제목</option>
-                        <option value="CONTENT" >내용</option>
+                        <option value="TITLE" <c:if test="${search.searchCondition == 'TITLE' }">selected</c:if>>제목</option>
+                        <option value="CONTENT" <c:if test="${search.searchCondition == 'CONTENT' }">selected</c:if>>내용</option>
                     </select>
-                    <input name="searchKeyword" type="text"/>
+                    <input name="searchKeyword" type="text" value="${search.searchKeyword}"/>
                     <input type="submit" value="검색"/>
                 </td>
             </tr>
