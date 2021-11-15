@@ -1,131 +1,21 @@
 package com.fastcampus.biz.user;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
+public interface UserDAO {
+    // USERS ê´€ë ¨ CRUD(Create(INSERT), Read(SELECT), Update, Delete) ë©”ì†Œë“œ êµ¬í˜„
+    // íšŒì› ë“±ë¡
+    void insertUser(UserVO vo);
 
-import com.fastcampus.biz.common.JDBCUtil;
+    // íšŒì› ìˆ˜ì •
+    void updateUser(UserVO vo);
 
-// DAO(Data Access Object)
-@Repository
-public class UserDAO {
-	// JDBC °ü·Ã º¯¼ö ¼±¾ğ
-	private Connection conn;
-	private PreparedStatement stmt;
-	private ResultSet rs;
-	
-	// BOARD °ü·Ã SQL ¸í·É¾îµé
-	private final String USER_INSERT = "insert into users values (?, ?, ?, sysdate, ?)";
-	private final String USER_UPDATE = "update users set role = ? where id = ?";
-	private final String USER_DELETE = "delete users where id = ?";
-	private final String USER_GET    = "select * from users where id = ? and password = ?";
-	private final String USER_LIST   = "select * from users order by seq desc";
-	
-	// USERS °ü·Ã CRUD(Create(INSERT), Read(SELECT), Update, Delete) ¸Ş¼Òµå ±¸Çö
-	// È¸¿ø µî·Ï
-	public void insertUser(UserVO vo) {
-		System.out.println("===> JDBC ±â¹İÀ¸·Î insertUser() ±â´É Ã³¸®");
-		try {
-			conn = JDBCUtil.getConnection();
-			stmt = conn.prepareStatement(USER_INSERT);
-			stmt.setString(1, vo.getId());
-			stmt.setString(2, vo.getPassword());
-			stmt.setString(3, vo.getName());
-			stmt.setString(3, vo.getRole());
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			JDBCUtil.close(stmt, conn);
-		}
-	}
-	
-	// È¸¿ø ¼öÁ¤
-	public void updateUser(UserVO vo) {
-		System.out.println("===> JDBC ±â¹İÀ¸·Î updateUser() ±â´É Ã³¸®");
-		try {
-			conn = JDBCUtil.getConnection();
-			stmt = conn.prepareStatement(USER_UPDATE);
-			stmt.setString(1, vo.getRole());
-			stmt.setString(2, vo.getId());
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			JDBCUtil.close(stmt, conn);
-		}
-	}
-	
-	// È¸¿ø »èÁ¦
-	public void deleteUser(UserVO vo) {
-		System.out.println("===> JDBC ±â¹İÀ¸·Î deleteUser() ±â´É Ã³¸®");
-		try {
-			conn = JDBCUtil.getConnection();
-			stmt = conn.prepareStatement(USER_DELETE);
-			stmt.setString(1, vo.getId());
-			stmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			JDBCUtil.close(stmt, conn);
-		}
-	}
-	
-	// È¸¿ø »ó¼¼ Á¶È¸
-	public UserVO getUser(UserVO vo) {
-		System.out.println("===> JDBC ±â¹İÀ¸·Î getUser() ±â´É Ã³¸®");
-		UserVO user = null;
-		try {
-			conn = JDBCUtil.getConnection();
-			stmt = conn.prepareStatement(USER_GET);
-			stmt.setString(1, vo.getId());
-			stmt.setString(2, vo.getPassword());
-			rs = stmt.executeQuery();
-			if(rs.next()) {
-				user = new UserVO();
-				user.setId(rs.getString("ID"));
-				user.setPassword(rs.getString("PASSWORD"));
-				user.setName(rs.getString("NAME"));
-				user.setRegDate(rs.getDate("REGDATE"));
-				user.setRole(rs.getString("ROLE"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			JDBCUtil.close(rs, stmt, conn);
-		} 
-		return user;
-	}
-	
-	// È¸¿ø ¸ñ·Ï Á¶È¸
-	public List<UserVO> getUserList(UserVO vo) {
-		System.out.println("===> JDBC ±â¹İÀ¸·Î getUserList() ±â´É Ã³¸®");
-		List<UserVO> userList = new ArrayList<UserVO>();
-		try {
-			conn = JDBCUtil.getConnection();
-			stmt = conn.prepareStatement(USER_LIST);
-			stmt.setString(1, vo.getId());
-			stmt.setString(2, vo.getPassword());
-			rs = stmt.executeQuery();
-			if(rs.next()) {
-				UserVO user = new UserVO();
-				user.setId(rs.getString("ID"));
-				user.setPassword(rs.getString("PASSWORD"));
-				user.setName(rs.getString("NAME"));
-				user.setRegDate(rs.getDate("REGDATE"));
-				user.setRole(rs.getString("ROLE"));
-				userList.add(user);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			JDBCUtil.close(rs, stmt, conn);
-		} 
-		return userList;
-	}
+    // íšŒì› ì‚­ì œ
+    void deleteUser(UserVO vo);
+
+    // íšŒì› ìƒì„¸ ì¡°íšŒ
+    UserVO getUser(UserVO vo);
+
+    // íšŒì› ëª©ë¡ ì¡°íšŒ
+    List<UserVO> getUserList(UserVO vo);
 }
