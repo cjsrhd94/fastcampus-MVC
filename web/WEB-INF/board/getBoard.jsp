@@ -48,7 +48,7 @@
         </table>
     </form>
     <hr>
-    <a href="insertBoard.jsp">글등록</a>&nbsp;&nbsp;&nbsp;
+    <a href="insertBoardView.do">글등록</a>&nbsp;&nbsp;&nbsp;
     <c:if test="${user.role == 'ADMIN'}">
     <a href="deleteBoard.do?seq=${board.seq }">글삭제</a>&nbsp;&nbsp;&nbsp;
     </c:if>

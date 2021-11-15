@@ -35,4 +35,10 @@
     <!-- Component 스캔 설정 -->
     <context:component-scan base-package="com.fastcampus.controller"/>
 
+    <!-- ViewResolver -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/board/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
 </beans>

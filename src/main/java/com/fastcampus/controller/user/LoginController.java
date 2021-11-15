@@ -14,15 +14,20 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping("/loginView.do")
+    public String loginView() {
+        return "login";
+    }
+
     @RequestMapping("/login.do")
     public String login(UserVO vo, HttpSession session) {
         System.out.println("로그인 기능 처리");
         UserVO user = userService.getUser(vo);
         if (user != null) {
             session.setAttribute("user", user);
-            return "getBoardList.do";
+            return "forward:getBoardList.do";
         } else {
-            return "login.html";
+            return "login";
         }
     }
 
@@ -30,6 +35,6 @@ public class LoginController {
     public String logout(HttpSession session) {
         System.out.println("로그아웃 기능 처리");
         session.invalidate();
-        return "login.html";
+        return "redirect:/";
     }
 }
