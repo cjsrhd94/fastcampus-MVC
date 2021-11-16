@@ -67,9 +67,21 @@
  	 <bean class="org.springframework.jdbc.core.JdbcTemplate">
  	 	<property name="dataSource" ref="dataSource"/>
  	 </bean>
+
+	<!-- Spring과 MyBatis 연동 설정 -->
+	<!-- 컨테이너 공장 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:sql-map-config.xml"/>
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+	<!-- 컨테이너 -->
+	<bean class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSession"/>
+	</bean>
  	 
  	 <!-- 실제로 사용할 BoardDAO 타입의 객체를 하나만 생성한다. -->
- 	 <bean class="com.fastcampus.biz.board.BoardDAOJdbc"/>
+ 	 <bean class="com.fastcampus.biz.board.BoardDAOMyBatis"/>
 	 <bean class="com.fastcampus.biz.user.UserDAOJdbc"/>
  	 
  	 <!-- Transaction 설정 시작 -->

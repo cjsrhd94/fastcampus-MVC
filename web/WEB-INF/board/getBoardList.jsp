@@ -1,5 +1,6 @@
 <%@page contentType="text/html; charset=EUC-KR" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <%-- EL(Expression Language) 이란? --%>
 <%-- session이나 request 내장 객체에 등록된 데이터를 JSP 파일에서 접근하기 위한 표현식 --%>
@@ -53,7 +54,7 @@
             </a></td>
             <td>${board.writer }
             </td>
-            <td>${board.regDate }
+            <td><fmt:formatDate value="${board.regDate }" pattern="yyyy-MM-dd"/>
             </td>
             <td>${board.cnt }
             </td>
