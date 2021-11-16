@@ -5,6 +5,7 @@ import com.fastcampus.biz.board.BoardVO;
 import com.fastcampus.biz.user.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -44,30 +45,28 @@ public class BoardController {
     }
 
     @RequestMapping("/getBoard.do")
-    public ModelAndView getBoard(BoardVO vo, HttpSession session, ModelAndView mav) {
+    public String getBoard(BoardVO vo, HttpSession session, Model model) {
         System.out.println("글 상세 조회 기능 처리");
-        session.setAttribute("board", boardService.getBoard(vo));
-        mav.setViewName("getBoard");
-        return mav;
+        model.addAttribute("board", boardService.getBoard(vo));
+        return "getBoard";
     }
 
     @RequestMapping("/getBoardList.do")
-    public ModelAndView getBoardList(BoardVO vo, HttpSession session, ModelAndView mav) {
+    public String getBoardList(BoardVO vo, HttpSession session, Model model) {
         System.out.println("글 목록 검색 기능 처리");
         UserVO user = (UserVO) session.getAttribute("user");
         if (user == null) {
-            mav.setViewName("login");
+            return "login";
         } else {
             // Null Check
             if (vo.getSearchCondition() == null) vo.setSearchCondition("TITLE");
             if (vo.getSearchKeyword() == null) vo.setSearchKeyword("");
             // 절대 검색 결과는 세션에 등록하지 않는다. 한 번 쓰고 삭제되는 request 객체에 저장해야 한다.
-            // 검색 결과를 ModelAndView에 저장하면 자동으로 request에 등록된다.
-            mav.addObject("boardList", boardService.getBoardList(vo));   // Model 저장
-            mav.addObject("search", vo);
-
-            mav.setViewName("getBoardList");                                         // View 저장
+            // 검색 결과를 Model에 저장하면 자동으로 request에 등록된다.
+            model.addAttribute("boardList", boardService.getBoardList(vo));   // Model 저장
+            model.addAttribute("search", vo);
+            return "getBoardList";                                        // View 저장
         }
-        return mav;
+
     }
 }
