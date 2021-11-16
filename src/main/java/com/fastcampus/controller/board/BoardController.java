@@ -61,11 +61,12 @@ public class BoardController {
             // Null Check
             if (vo.getSearchCondition() == null) vo.setSearchCondition("TITLE");
             if (vo.getSearchKeyword() == null) vo.setSearchKeyword("");
+            // 절대 검색 결과는 세션에 등록하지 않는다. 한 번 쓰고 삭제되는 request 객체에 저장해야 한다.
+            // 검색 결과를 ModelAndView에 저장하면 자동으로 request에 등록된다.
+            mav.addObject("boardList", boardService.getBoardList(vo));   // Model 저장
+            mav.addObject("search", vo);
 
-            session.setAttribute("boardList", boardService.getBoardList(vo));
-            session.setAttribute("search", vo);
-
-            mav.setViewName("getBoardList");
+            mav.setViewName("getBoardList");                                         // View 저장
         }
         return mav;
     }
