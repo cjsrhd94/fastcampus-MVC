@@ -27,7 +27,9 @@ public class BoardDAOJdbc implements BoardDAO {
 	private final String BOARD_DELETE     = "delete board where seq = ?";
 	private final String BOARD_GET        = "select * from board where seq = ?";
 	private final String BOARD_LIST       = "select * from board order by seq desc";
-	
+	private final String BOARD_LIST_T       = "select * from board where title like ? order by seq desc";
+	private final String BOARD_LIST_C       = "select * from board where content like ? order by seq desc";
+
 	public BoardDAOJdbc() {
 		System.out.println("===> BoardDAO 생성");
 	}
@@ -119,7 +121,13 @@ public class BoardDAOJdbc implements BoardDAO {
 		List<BoardVO> boardList = new ArrayList<BoardVO>();
 		try {
 			conn = JDBCUtil.getConnection();
-			stmt = conn.prepareStatement(BOARD_LIST);
+			if(vo.getSearchCondition().equals("TITLE")){
+				stmt = conn.prepareStatement(BOARD_LIST_T);
+			} else if (vo.getSearchCondition().equals("CONTENT")){
+				stmt = conn.prepareStatement(BOARD_LIST_C);
+			}
+			// 검색 키워드에 해당하는 ?에 값을 설정한다.
+			stmt.setString(1, "%" + vo.getSearchKeyword() + "%");
 			rs = stmt.executeQuery();
 			while(rs.next()) {
 				BoardVO board = new BoardVO();
